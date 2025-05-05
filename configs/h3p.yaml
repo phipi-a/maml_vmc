@@ -1,0 +1,64 @@
+trainer:
+  class_path: maml_vmc.MamlTrainer.MamlTrainer
+  init_args:
+    storing_epochs: [16, 32, 64, 128, 256, 512, 1024]
+    reinit_layers: false
+    seed: 5
+    optimization_strategy: direct
+    eval_every: 1000000
+    num_steps: 1025
+    num_inner_steps: 1
+    num_inner_steps_validation: 0
+    num_systems: 1
+    num_batches: 4
+    num_systems_validation: 1
+    store_every: 1024
+    reinit_ones: false
+    trans_num_electrons: 2
+    trans_num_dets: 20
+    model:
+      class_path: maml_vmc.models.deep_erwin.DeepErwin.DeepErwin
+      init_args:
+        backflow_factor_net:
+          n_max_electrons: 2
+          n_dets: 20
+        casscf_baseline:
+          class_path: maml_vmc.models.deep_erwin.CASSCFBaseline.CASSCFBaseline
+    optimizer: 
+      class_path: maml_vmc.optimizer.AdamSchedule.AdamSchedule
+      init_args:
+        lr: 1.5e-3
+    inner_optimizer: 
+      class_path: maml_vmc.optimizer.Erwin.Erwin
+      init_args:
+        lr: 1.5e-3
+        lr_decay_time: 1000
+        num_batches: 4
+    data_sampler:
+      class_path: maml_vmc.sampler.MoleculeDataSampler.MoleculeDataSampler
+      init_args:
+        num_burnin_steps: 2048
+        num_inter_burnin_steps: 20
+        num_steps: 1
+        num_samples: 2048
+        step_size: 1
+        dataset_path: exp/ds/test_H3p/configs
+        file_name: config_n3_el2_i0.pkl
+        add_noise: false
+    val_data_sampler:
+      class_path: maml_vmc.sampler.MoleculeDataSampler.MoleculeDataSampler
+      init_args:
+        num_burnin_steps: 2048
+        num_inter_burnin_steps: 20
+        num_steps: 1
+        num_samples: 2048
+        step_size: 1
+        dataset_path: exp/ds/test_H3p/configs
+        file_name: config_n3_el2_i0.pkl
+logger:
+  class_path: maml_vmc.lijax.logger.WandbLogger.WandbLogger
+  init_args:
+    run_name: h3p
+    use_logger: true
+
+

@@ -1,0 +1,14 @@
+jsonargparse[signatures]>=4.27.7
+jax[cuda12]
+dm-haiku
+optax
+pillow
+matplotlib
+tqdm
+typing
+wandb
+scipy
+ipykernel
+mlflow
+loguru
+pyscf

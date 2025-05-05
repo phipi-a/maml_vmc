@@ -1,0 +1,57 @@
+trainer:
+  class_path: maml_vmc.MamlTrainer.MamlTrainer
+  init_args:
+    seed: 5
+    optimization_strategy: direct
+    eval_every: 1000000
+    num_steps: 20000
+    num_inner_steps: 1
+    num_inner_steps_validation: 0
+    num_systems: 1
+    num_systems_validation: 1
+    store_every: 1000
+    trans_num_electrons: 10
+    trans_num_dets: 32
+    model:
+      class_path: maml_vmc.models.deep_erwin.DeepErwin.DeepErwin
+      init_args:
+        backflow_factor_net:
+          n_max_electrons: 10
+    optimizer: 
+      class_path: maml_vmc.optimizer.Adam.Adam
+      init_args:
+        lr: 1.5e-3
+    inner_optimizer: 
+      class_path: maml_vmc.optimizer.Erwin.Erwin
+      init_args:
+        lr: 1.5e-3
+        lr_decay_time: 1000
+        num_batches: 4
+    data_sampler:
+      class_path: maml_vmc.sampler.MoleculeDataSampler.MoleculeDataSampler
+      init_args:
+        num_burnin_steps: 2048
+        num_inter_burnin_steps: 20
+        num_steps: 1
+        num_samples: 2028
+        step_size: 1
+        file_name: config_n10_el10_i0.pkl
+        dataset_path: exp/ds/test_h10_chains
+        
+    val_data_sampler:
+      class_path: maml_vmc.sampler.MoleculeDataSampler.MoleculeDataSampler
+      init_args:
+        num_burnin_steps: 2048
+        num_inter_burnin_steps: 20
+        num_steps: 1
+        num_samples: 2048
+        step_size: 1
+        file_name: config_n10_el10_i0.pkl
+        dataset_path: exp/ds/test_h10_chains
+logger:
+  class_path: maml_vmc.lijax.logger.WandbLogger.WandbLogger
+  init_args:
+    run_name: h_10_chain
+    use_logger: true
+
+
